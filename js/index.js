@@ -20,7 +20,7 @@ async function processImage() {
       document.getElementById('ocrResult').textContent = text;
       //richiamo FUNZIONE PER ESTRARRE DALLO SCONTRINO L'IMPORTO
       const amount = extractAmount(text);
-      if (amount) saveExpense(amount);
+      if (amount) showExpense(amount);
       else alert("⚠️ Impossibile trovare l'importo nello scontrino.");
     } catch (error) {
       document.getElementById('ocrResult').textContent = 'Errore nella scansione.';
@@ -34,10 +34,12 @@ async function processImage() {
 function extractAmount(text) {
   // Linee comuni che precedono l'importo
   const patterns = [
-    /importo\s*pagato\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i,
-    /tot(?:ale)?\s*(?:complessivo)?\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i,
-    /pag\.?contante\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i,
-    /tot\.?\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i
+    /importo\s*pagato\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i, // importo pagato
+    /tot(?:ale)?\s*(?:complessivo)?\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i, // totale
+    /pag\.?contante\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i, // pagato in contante
+    /tot\.?\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i, // totale senza spazio
+    /\b(\d+[,.]?\d{0,2})\s*euro\b/i // Altri formati comuni
+
   ];
 
   for (const pattern of patterns) {
@@ -49,12 +51,12 @@ function extractAmount(text) {
 
   return null; // Nessun importo trovato
 }
-
-function saveExpense(amount) {
-  const expenses = JSON.parse(localStorage.getItem('expenses') || '[]');
-  expenses.push({ date: new Date().toISOString(), amount });
-  localStorage.setItem('expenses', JSON.stringify(expenses));
-  renderExpenses();
+//mostro l'ultimo scontrino caricato dall'utente
+function showExpense(amount) {
+  let date = new Date().toISOString();
+  let formattedDate = new Date(date).toLocaleDateString('it-IT');
+  document.getElementById("dateLast").textContent = formattedDate;
+  document.getElementById("totalLast").textContent = amount.toFixed(2); //formatta l'importo con 2 decimali
 }
 
 function renderExpenses() {

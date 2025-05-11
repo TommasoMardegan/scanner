@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>Scanner Spese</title>
   <link rel="stylesheet" href="../css/style.css" />
   <script src="../js/index.js"></script>
@@ -17,10 +18,17 @@
 
   <div id="ocrResult"></div>
   <!--totale di tutte le spese-->
+  <h2>Ultimo scontrino</h2>
+  <p>Data: <span id="dateLast"></span></p>
+  <p>Totale: <span id="totalLast">0 €</span></p>
+  <br>
+  <!--da cambiare - caricare da database le spese-->
   <h2>Spese Registrate</h2>
   <ul id="expenseList"></ul>
   <p>Totale: <span id="total">0 €</span></p>
 
+  <button onclick="saveExpense()">salva ultimo scontrino</button>
+  
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
   <script src="../js/index.js"></script>
 </body>
