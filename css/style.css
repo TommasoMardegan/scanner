@@ -1,0 +1,21 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+}
+
+input[type="file"],
+button {
+  display: block;
+  margin: 10px 0;
+}
+
+#ocrResult {
+  margin-top: 10px;
+  white-space: pre-wrap;
+  font-size: 0.9em;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+}

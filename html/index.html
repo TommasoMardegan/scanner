@@ -4,17 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scanner Spese</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
   <!--titolo-->
   <h1>Scanner Spese</h1>
-  
+  <!--permetto solo a immagini di essere caricate-->
   <input type="file" accept="image/*" capture="environment" id="imageInput" />
+  <!--bottone che dall'immagine scaricata processa lo scontrino-->
   <button onclick="processImage()">Scansiona Scontrino</button>
 
   <div id="ocrResult"></div>
-  
+  <!--totale di tutte le spese-->
   <h2>Spese Registrate</h2>
   <ul id="expenseList"></ul>
   <p>Totale: <span id="total">0 €</span></p>
