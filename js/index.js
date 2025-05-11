@@ -11,7 +11,8 @@ async function processImage() {
 
     try {
       const result = await Tesseract.recognize(reader.result, 'ita', {
-        langPath: 'https://tessdata.projectnaptha.com/4.0.0_best',
+        langPath: 'https://tessdata.projectnaptha.com/4.0.0_best/',
+        corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@4.0.2/tesseract-core.wasm.js',
         logger: m => console.log(m)
       });
 
@@ -29,11 +30,24 @@ async function processImage() {
 
   reader.readAsDataURL(file);
 }
-//funzione per estrarre l'importo dallo scontrino
+//funzione per estrarre l'importo dallo scontrino tramite regex
 function extractAmount(text) {
-   //combinazione di caratteri per riconoscere l'importo
-  const match = text.match(/(\d+[,\.]?\d{0,2})\s*€/); // es. "12,50 €"
-  return match ? parseFloat(match[1].replace(',', '.')) : null;
+  // Linee comuni che precedono l'importo
+  const patterns = [
+    /importo\s*pagato\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i,
+    /tot(?:ale)?\s*(?:complessivo)?\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i,
+    /pag\.?contante\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i,
+    /tot\.?\s*[:\-]?\s*(\d+[,.]?\d{0,2})/i
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match) {
+      return parseFloat(match[1].replace(',', '.'));
+    }
+  }
+
+  return null; // Nessun importo trovato
 }
 
 function saveExpense(amount) {
