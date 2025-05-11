@@ -74,5 +74,26 @@ function renderExpenses() {
   document.getElementById('total').textContent = total.toFixed(2) + ' €';
 }
 
-// inizializza al load
-renderExpenses();
+//salva lo scontrino nel database
+function saveExpense() {
+    //leggi la data
+    let date = document.getElementById("dateLast").textContent;
+
+    //leggi il totale (rimuovi il simbolo € e convertilo in numero)
+    let total = document.getElementById("totalLast").textContent;
+    total = parseFloat(total.replace(' €', ''));
+    //invo lo scontrino in post alla pagina apposita in php
+    $.post('../php/saveExpense.php', {
+            total: total,
+            date: date,
+        }, function (data) {
+            // Se l'inserimento ha avuto successo, reindirizza alla pagina di gestione biciclette
+            if (data === "successo") {
+                alert("scontrino salvato con successo");
+            } else {
+                // Altrimenti, mostra un messaggio di errore
+                alert('Si è verificato un errore durante il salvataggio dello scontrino.');
+            }
+        });
+}
+
